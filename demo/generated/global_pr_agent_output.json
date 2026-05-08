@@ -1,0 +1,488 @@
+{
+  "metadata": {
+    "brand": "问界 / AITO",
+    "product_or_business": "AITO 9 / AITO 7 / AITO 5 Gulf-ready intelligent luxury SUVs",
+    "target_market": "阿联酋 UAE",
+    "target_language": "English",
+    "pr_objective": "Generate a localized overseas PR draft for AITO's UAE market-entry narrative.",
+    "announcement_type": "Market Entry / Brand Launch",
+    "deadline": "48-hour demo"
+  },
+  "information_report": {
+    "metadata": {
+      "brand": "问界 / AITO。AITO 官方将品牌名解释为 Adding Intelligence to Auto。",
+      "product_business": "高端智能新能源汽车品牌，当前主心智是高端智能 / 新豪华 / 智慧豪华 SUV，而非大众化价格竞争型电动车品牌。",
+      "target_market": "阿联酋 UAE。推荐依据是官方已披露 UAE 渠道合作、售后规划、市场准入、本地化车型与仓配准备。",
+      "target_language": "英文为主；在 UAE 场景建议同时准备阿拉伯语本地化素材。中东版车型已明确支持中英阿三语交互。",
+      "pr_objective": "为后续海外本土化英文 PR 生成提供事实底稿、策略边界、竞争参照与风险清单。",
+      "report_date": "2026-05-08",
+      "confidence_level": "中高"
+    },
+    "brand_snapshot": {
+      "brand_positioning": "AITO 官方定位是高端智能汽车豪华品牌，核心口号是 Intelligence Redefining Luxury / 智慧重塑豪华。品牌叙事强调把传统豪华的安全与舒适，与智能驾驶辅助、智能座舱和数字服务结合。",
+      "parent_company_ecosystem": "最准确表述：AITO 是赛力斯集团旗下高端智能汽车品牌；在中国市场，问界属于鸿蒙智行 HIMA 生态品牌之一；华为提供智能汽车相关技术与生态能力，赛力斯负责整车研发、制造、销售与服务能力。2024 年赛力斯公告收购 AITO/问界相关商标与外观设计专利，因此不宜写成华为拥有该品牌。",
+      "core_product_lines": [
+        "中国市场当前公开产品线：M5、M6、M7、M8、M9。",
+        "全球官网当前主推海外线：AITO 5、AITO 7、AITO 9。"
+      ],
+      "technology_narrative": [
+        "华为乾崑智驾 ADS、鸿蒙座舱、通信与数字生态能力。",
+        "赛力斯超级增程系统、魔方 / MF 平台、多动力兼容与效率叙事。",
+        "豪华体验与安全，包括零重力座椅、大空间、主动安全与健康座舱。"
+      ],
+      "current_market_perception": "赛力斯 2024 年年报称问界 2024 年 NPS 达 82%，并跻身中国高端汽车市场第一梯队；赛力斯 2025 年官方新闻称 AITO 2025 年交付超 42 万辆，成为中国国内销量最高的中国豪华汽车品牌。",
+      "existing_global_overseas_signals": [
+        "2025 年 3 月，AITO 与卡塔尔 ELYSEE CARS 签署总代理协议。",
+        "2026 年 2 月，AITO 与 Abu Dhabi Motors 旗下 Performance Plus Motors 达成 UAE 销售、交付与售后合作。",
+        "IAA MOBILITY 2025 展出针对中东深度本地化开发的 AITO 9/7/5，并称三款车型已获得 UAE 市场准入认证，且将设 UAE 子公司、迪拜中央仓与本地供应链。",
+        "欧洲已有欧亚智驾行与巴黎车展曝光。",
+        "东南亚已有菲律宾本地站与 QSJ Motors 在 MIAS 2025 的 AITO M9 展示。"
+      ]
+    },
+    "product_offering_summary": [
+      {
+        "product_name": "AITO 9",
+        "key_selling_points": "全场景智能旗舰 SUV，强调旗舰空间、豪华座舱、智能化与安全。",
+        "technical_differentiators": [
+          "27 个感知单元与 192 线激光雷达实时扫描。",
+          "前向 AEB 最高工作范围可达 150 km/h。",
+          "智能底盘、空气悬架与 CDC 叙事突出。"
+        ],
+        "user_value": "适合讲家庭与商务双场景的旗舰豪华出行，让长途、城市通勤和高端接待都成立。",
+        "proof_points": [
+          "中国 50 万元级豪华车 / RMB 500,000+ 豪华车细分冠军叙事。"
+        ],
+        "potential_weaknesses": [
+          "海外版完整配置、实际工况续航和价格公开信息仍有限。",
+          "ADS 不能写成自动驾驶。"
+        ]
+      },
+      {
+        "product_name": "AITO 7",
+        "key_selling_points": "大尺寸舒适 SUV，强调家庭场景、二排体验、空间灵活与增程便利。",
+        "technical_differentiators": [
+          "智能增程、舒适底盘、零重力座椅和大空间。"
+        ],
+        "user_value": "更容易切中中东家庭旗舰 SUV 与商务接待双用需求。",
+        "proof_points": [
+          "问界新 M7 在中国有高交付量与用户满意度背书。"
+        ],
+        "potential_weaknesses": [
+          "如果不把增程便利性与本地服务讲透，容易被误读为过渡技术。该判断为市场推导。"
+        ]
+      },
+      {
+        "product_name": "AITO 5",
+        "key_selling_points": "中型运动智能 SUV，适合讲年轻豪华、科技运动与都市性能。",
+        "technical_differentiators": [
+          "智能增程平台、双电机 AWD、全铝底盘悬架。"
+        ],
+        "user_value": "适合当品牌入口车型或承担年轻化传播。",
+        "proof_points": [
+          "中国市场定位为高颜都市性能 SUV，女性用户占比较高。"
+        ],
+        "potential_weaknesses": [
+          "在 UAE 的大 SUV 偏好环境里，传播优先级可能低于 AITO 9 / 7。该判断基于当地 premium 与 SUV 市场结构推导。"
+        ]
+      }
+    ],
+    "target_market_context": {
+      "market_selected": "阿联酋 UAE",
+      "backup_markets": [
+        "菲律宾（若必须做东南亚试点）。已有本地站与分销商展会展示信号，但整体区域落地强度仍弱于 UAE。",
+        "卡塔尔（若沿既有中东路径扩张）。已有总代理合作。"
+      ],
+      "why_this_market": "UAE 同时具备官方渠道合作、售后规划、市场准入、本地化车型、仓配准备、较强 premium demand、较好的充电基础设施，以及对中国新能源品牌较开放的窗口。相较之下，欧洲关税与合规风险更高，东南亚更偏价格竞争与本地制造逻辑。",
+      "candidate_market_comparison": [
+        {
+          "candidate_market": "中东",
+          "market_opportunity": "增长快且官方动作最明确。GCC 2024 年 EV 渗透率约从 2% 升至 4%，UAE 为区域销量领先市场。",
+          "competition": "德系豪华、Tesla 与中国新品牌并存，但高端智能 SUV 心智仍在重塑。",
+          "consumer_mindset": "技术、成本、可持续与豪华体验并重。",
+          "policy_environment": "UAE EV 政策与 Dubai 充电基础设施支撑市场进入。",
+          "pr_tellability": "最高。AITO 已有 UAE / Qatar 官方商业化动作。",
+          "risk": "残值、售后、品牌信任仍需管理。",
+          "verdict": "recommended"
+        },
+        {
+          "candidate_market": "欧洲",
+          "market_opportunity": "市场大、符号价值高，但 2024 年 EV 销量停滞，2025 消费者仍关心价格、续航和充电便利。",
+          "competition": "最成熟、最拥挤。",
+          "consumer_mindset": "更开放于 EV，但需要把日常适配性讲清楚。",
+          "policy_environment": "欧盟对中国 BEV 已征收 5 年反补贴税。",
+          "pr_tellability": "有 prestige，但事实风险和政治风险高。",
+          "risk": "关税、数据与政治敏感度高。",
+          "verdict": "not_recommended_for_this_demo"
+        },
+        {
+          "candidate_market": "东南亚",
+          "market_opportunity": "增长亮眼，IEA 预计 2030 年电动车销量占比可达 25%。",
+          "competition": "中国品牌密集，价格竞争强，本地制造逻辑明显。",
+          "consumer_mindset": "接受中国品牌，但主流战场更偏高性价比和制造本地化。该判断基于 IEA 与泰国政策推导。",
+          "policy_environment": "多国激励与本地生产绑定更深。",
+          "pr_tellability": "次优。AITO 已有菲律宾信号，但区域级体系化证据弱于 UAE。",
+          "risk": "价格战、豪华心智稀释、本地化制造门槛。",
+          "verdict": "secondary_option"
+        }
+      ],
+      "local_ev_smart_mobility_landscape": "UAE / GCC EV 市场仍处早期，但增长快且满意度高。GCC EV 渗透率 2024 年翻倍，UAE 充电满意度 95%，Dubai 已有 1,270+ 充电点。与此同时，本地行业研究显示 premium 需求上升，中国品牌存在感增强，但折旧和残值话题也在升温。",
+      "consumer_preferences": "UAE 用户看重技术、豪华、成本与服务的平衡。低使用与维护成本、先进技术和可持续性是 EV 采用的关键驱动；SUV 与 luxury 细分仍是强需求。",
+      "regulatory_policy_context": "UAE 国家 EV 政策支持全国充电网络与市场规范。AITO 官方又已明确提到 UAE 准入、本地供应链和售后合作，使 UAE 成为相对低事实风险的首发 PR 市场。",
+      "media_narrative": "当前 UAE 媒体和行业对中国新能源品牌的叙事是机会与警惕并存：一方面强调高配置和高价值密度，另一方面关注折旧、保险、售后与二手残值。"
+    },
+    "competitor_landscape": [
+      {
+        "competitor": "Nissan Patrol / Toyota Land Cruiser",
+        "positioning": "海湾 full-size SUV 默认参照系。",
+        "strength": "本地心智、渠道和大型 SUV 使用场景适配强。",
+        "weakness": "新能源与智能豪华叙事相对弱。",
+        "pr_implication": "AITO 需把自己讲成 Gulf-ready 的智能豪华大 SUV，而不是另一台电车。"
+      },
+      {
+        "competitor": "Tesla Model X",
+        "positioning": "软件和纯电先行者型豪华 SUV。",
+        "strength": "品牌全球知名度和软件心智强。",
+        "weakness": "AITO 可用旗舰座舱豪华与长途便利做差异化。该弱点是相对传播判断。",
+        "pr_implication": "AITO 应强调旗舰豪华、家庭舒适和长途无顾虑，而非模仿 Tesla。"
+      },
+      {
+        "competitor": "Mercedes-Benz EQS SUV",
+        "positioning": "传统豪华品牌的电动旗舰 SUV。",
+        "strength": "豪华品牌信任、成熟渠道。",
+        "weakness": "在智能化新鲜感上可能不如中国新势力。该判断结合市场动态推导。",
+        "pr_implication": "AITO 不比血统，重点比智能豪华体验与在地服务。"
+      },
+      {
+        "competitor": "BMW iX",
+        "positioning": "德系 premium-tech 豪华电动 SUV。",
+        "strength": "品牌认知和 premium-tech 心智稳。",
+        "weakness": "纯电路径在部分长途/高温场景里天然更需教育。该为场景判断。",
+        "pr_implication": "AITO 用增程便利、家庭空间与 Gulf-ready 场景差异化。"
+      },
+      {
+        "competitor": "Lotus Eletre",
+        "positioning": "高性能导向豪华纯电 SUV。",
+        "strength": "设计与性能标签鲜明。",
+        "weakness": "不一定覆盖家庭/接待导向的全场景豪华诉求。该为相对定位判断。",
+        "pr_implication": "AITO 应更像智能新豪华旗舰，而非性能玩具。"
+      },
+      {
+        "competitor": "Zeekr 7X / AVATR 等中国高端智能车",
+        "positioning": "中国 premium 智能新能源同类对手，正在 UAE 形成渠道与 showroom。",
+        "strength": "高配、快迭代、智能化预期强。",
+        "weakness": "中国品牌之间在当地容易被混同。该为传播风险判断。",
+        "pr_implication": "AITO 必须突出赛力斯制造、AITO 新豪华定位与本地服务承诺。"
+      }
+    ],
+    "target_audience": {
+      "primary_audience": "UAE 的高收入家庭、企业主和管理层、premium SUV 买家，以及正在 cross-shop 德系豪华与大型 SUV 的用户。",
+      "secondary_audience": "对中国高端智能车持开放态度的早期采用者，以及希望从传统豪华切换到更智能产品的买家。",
+      "decision_makers": "家庭购车中的共同决策者、主驾驶者，以及对高端品牌选择有影响的经销顾问和口碑链路。后两者为基于市场链路的辅助判断。",
+      "emotional_triggers": [
+        "新豪华身份感。",
+        "一家人都舒服的大空间和二排体验。",
+        "适合高温和长距离出行的安心感。"
+      ],
+      "rational_triggers": [
+        "智能座舱与驾驶辅助安全。",
+        "长途便利与补能现实可行性。",
+        "渠道、售后、零件与服务稳定性。",
+        "总拥有成本与残值。"
+      ],
+      "media_channels": [
+        "汽车、商业、科技和奢侈生活方式媒体。",
+        "YouTube / Instagram / TikTok 创作者与试驾内容。",
+        "dealer-led 试驾体验与 WhatsApp 转化链路。后者有本地平台数据支持。"
+      ]
+    },
+    "localization_strategy": {
+      "recommended_tone": "premium、restrained、engineering-led、service-backed",
+      "cultural_considerations": [
+        "强调家庭、待客、长途与高温环境适应。",
+        "强调本地合作伙伴与长期服务承诺。",
+        "避免中国对西方的对抗式叙事。"
+      ],
+      "terms_to_avoid": [
+        "Huawei-owned brand",
+        "self-driving / autonomous",
+        "already on sale in Europe",
+        "global No.1 luxury brand",
+        "zero anxiety"
+      ],
+      "topics_to_emphasize": [
+        "Gulf-ready 本地化。",
+        "阿语 / 英语交互与本地数字生态。",
+        "旗舰安全、舒适与智能座舱。",
+        "渠道、售后、中央仓和零件保障。"
+      ],
+      "topics_to_de_emphasize": [
+        "中国本土排名不加限定直接外推",
+        "地缘政治与价格战",
+        "未经验证的数据隐私或软件能力承诺",
+        "中国 CLTC 数据不加测试口径说明"
+      ]
+    },
+    "pr_angle_recommendation": {
+      "recommended_main_angle": "面向海湾家庭与高端出行场景的智能新豪华 SUV，把旗舰级智能座舱、安全与服务体验，与中东用户关心的长途便利、高温环境适应和家庭舒适结合。该主线建立在 AITO 的中东本地化车型、UAE 合作渠道与在地准备之上。",
+      "alternative_angles": [
+        "From China proof to Gulf trust。",
+        "Intelligent luxury without long-distance compromise。",
+        "Glocal new luxury。"
+      ],
+      "suggested_headline_directions": [
+        "为海湾而来的智能新豪华 SUV",
+        "把智能豪华带到 UAE，而不是把中国版本原样外运",
+        "新豪华，不止于电动"
+      ],
+      "suggested_spokesperson_quote_direction": "强调长期本地合作、围绕当地用户需求做适配、安全舒适智能三者并重，避免颠覆全球或绝对领先式夸口。",
+      "suggested_media_pitch_direction": "先用商业/汽车/科技媒体建立进入 UAE 的合理性，再用试驾体验内容验证豪华与智能感知，最后再拓展到 lifestyle 与 sustainability 话题。"
+    },
+    "risk_register": [
+      {
+        "risk": "误写华为关系",
+        "why_it_matters": "官方资料不支持把 AITO 写成华为拥有的汽车品牌。",
+        "severity": "high",
+        "mitigation": "统一使用 under SERES Group / part of the HIMA ecosystem 等表述。"
+      },
+      {
+        "risk": "把 ADS 写成自动驾驶",
+        "why_it_matters": "官方明确说明 ADS 只是辅助驾驶。",
+        "severity": "high",
+        "mitigation": "统一写 intelligent driving assistance / advanced driver assistance。"
+      },
+      {
+        "risk": "夸大海外落地范围",
+        "why_it_matters": "当前强官方证据主要集中在 UAE、Qatar 与有限的其他点位。",
+        "severity": "high",
+        "mitigation": "只写 entering / expanding into 指定市场，不写 broad global rollout。"
+      },
+      {
+        "risk": "直接套用中国销量、排名和 CLTC 续航",
+        "why_it_matters": "实际续航受工况和当地法规影响，中国成绩只能作中国市场背书。",
+        "severity": "high",
+        "mitigation": "所有成绩加地区限定，所有续航加测试口径说明。"
+      },
+      {
+        "risk": "忽视残值、保险、售后和折旧担忧",
+        "why_it_matters": "本地行业和研究都显示这些因素会影响 EV 与中国品牌 adoption。",
+        "severity": "medium",
+        "mitigation": "把本地服务、零件、体验中心和伙伴背书写入传播主轴。"
+      },
+      {
+        "risk": "对抗式文化和地缘政治表达",
+        "why_it_matters": "会削弱 UAE 高端市场需要的成熟、克制、服务导向语气。该为传播风险判断。",
+        "severity": "medium",
+        "mitigation": "坚持 premium、user-first、本地伙伴共建的表达框架。"
+      }
+    ],
+    "source_notes": {
+      "high_confidence_sources": [
+        "AITO 官方全球站与新闻页。",
+        "问界 / 鸿蒙智行官网。",
+        "赛力斯 2024 年年报与知识产权公告。",
+        "华为数字能源官方合作新闻。",
+        "IEA Global EV Outlook 2025。",
+        "European Commission、UAE 官方政策及 DEWA / WAM、Thailand BOI、Roland Berger。"
+      ],
+      "conflicting_information": [
+        "部分媒体把 AITO 写成 Huawei-backed 或 co-developed，这可作背景，但不能替代官方口径。官方口径更接近 SERES Group 旗下高端品牌 + HIMA 生态合作。"
+      ],
+      "unknowns_and_assumptions": [
+        "用户未附上明确 JSON Schema，因此本 JSON 结构按用户字段要求推断。",
+        "未找到 UAE / Qatar 的官方公开销量、价格与详细开业时间，因此不应编造。",
+        "未找到欧洲正式销售时间表，故不能写即将上市欧洲。",
+        "海外软件、ADS 与本地生态能力可能因法规、OTA 和配置而不同，应写 subject to local regulations / actual configuration。"
+      ]
+    }
+  },
+  "human_confirmation": {
+    "brand_tone": "premium、restrained、engineering-led、service-backed",
+    "product_tone": "intelligent new luxury SUV for Gulf family and executive mobility",
+    "target_audience": "UAE 的高收入家庭、企业主和管理层、premium SUV 买家，以及正在 cross-shop 德系豪华与大型 SUV 的用户。",
+    "overseas_strategy_baseline": "From China proof to Gulf trust: combine China-market credibility with UAE local partner and service readiness.",
+    "core_pr_angle": "面向海湾家庭与高端出行场景的智能新豪华 SUV，把旗舰级智能座舱、安全与服务体验，与中东用户关心的长途便利、高温环境适应和家庭舒适结合。该主线建立在 AITO 的中东本地化车型、UAE 合作渠道与在地准备之上。",
+    "localization_strategy": "强调家庭、待客、长途与高温环境适应。; 强调本地合作伙伴与长期服务承诺。; 避免中国对西方的对抗式叙事。",
+    "risk_constraints": [
+      "误写华为关系: 统一使用 under SERES Group / part of the HIMA ecosystem 等表述。",
+      "把 ADS 写成自动驾驶: 统一写 intelligent driving assistance / advanced driver assistance。",
+      "夸大海外落地范围: 只写 entering / expanding into 指定市场，不写 broad global rollout。",
+      "直接套用中国销量、排名和 CLTC 续航: 所有成绩加地区限定，所有续航加测试口径说明。",
+      "忽视残值、保险、售后和折旧担忧: 把本地服务、零件、体验中心和伙伴背书写入传播主轴。",
+      "对抗式文化和地缘政治表达: 坚持 premium、user-first、本地伙伴共建的表达框架。"
+    ],
+    "spokesperson_direction": "强调长期本地合作、围绕当地用户需求做适配、安全舒适智能三者并重，避免颠覆全球或绝对领先式夸口。",
+    "human_notes": "Auto-filled from the information search report. Human can edit before generation."
+  },
+  "task_plan": {
+    "clarification_questions": [
+      "本次 PR 是品牌进入市场、产品发布、渠道合作，还是媒体试驾前置稿？",
+      "是否以 AITO 9 作为主角，AITO 7 / 5 作为产品矩阵补充？",
+      "是否允许引用中国市场成绩？如果允许，必须加中国市场与细分市场限定。",
+      "是否有 UAE 本地价格、交付时间、体验中心开业时间等可公开信息？",
+      "英文稿是否需要同步准备阿拉伯语短标题或社媒素材？"
+    ],
+    "task_plan": [
+      {
+        "step": 0,
+        "name": "Task Start",
+        "status": "done",
+        "output": "Task metadata and clarification questions"
+      },
+      {
+        "step": 1,
+        "name": "Information Search Agent Report",
+        "status": "done",
+        "output": "DeepResearch report loaded as upstream intelligence"
+      },
+      {
+        "step": 2,
+        "name": "Human Confirmation",
+        "status": "done",
+        "output": "Brand tone, PR angle, risk constraints"
+      },
+      {
+        "step": 3,
+        "name": "PR Director Insight",
+        "status": "done",
+        "output": "Narrative direction and localization advice"
+      },
+      {
+        "step": 4,
+        "name": "PR Draft Generation",
+        "status": "done",
+        "output": "Press release, headlines, captions, pitch email"
+      },
+      {
+        "step": 4.1,
+        "name": "Specialist Review",
+        "status": "done",
+        "output": "Content, brand, creative, legal-risk feedback"
+      },
+      {
+        "step": 4.2,
+        "name": "Human Feedback Revision",
+        "status": "ready",
+        "output": "Revised draft"
+      },
+      {
+        "step": 5,
+        "name": "Compliance Gate",
+        "status": "demo_pass",
+        "output": "Lightweight demo notice; real legal review reserved"
+      }
+    ],
+    "initial_strategy_hint": "面向海湾家庭与高端出行场景的智能新豪华 SUV，把旗舰级智能座舱、安全与服务体验，与中东用户关心的长途便利、高温环境适应和家庭舒适结合。该主线建立在 AITO 的中东本地化车型、UAE 合作渠道与在地准备之上。"
+  },
+  "insight": {
+    "brand_insight": "AITO should not be positioned as a generic Chinese EV exporter. The stronger narrative is a premium intelligent vehicle brand under SERES Group, connected with the HIMA ecosystem in China, translating China-market product proof into Gulf-market trust. Verified brand basis: 最准确表述：AITO 是赛力斯集团旗下高端智能汽车品牌；在中国市场，问界属于鸿蒙智行 HIMA 生态品牌之一；华为提供智能汽车相关技术与生态能力，赛力斯负责整车研发、制造、销售与服务能力。2024 年赛力斯公告收购 AITO/问界相关商标与外观设计专利，因此不宜写成华为拥有该品牌。",
+    "market_insight": "UAE is the strongest demo market because the report shows verified market-entry signals, local partner readiness, premium SUV demand, and a media environment that is open to Chinese intelligent vehicles but cautious about resale value, service stability, and over-claims. Market basis: UAE 同时具备官方渠道合作、售后规划、市场准入、本地化车型、仓配准备、较强 premium demand、较好的充电基础设施，以及对中国新能源品牌较开放的窗口。相较之下，欧洲关税与合规风险更高，东南亚更偏价格竞争与本地制造逻辑。",
+    "pr_narrative": "面向海湾家庭与高端出行场景的智能新豪华 SUV，把旗舰级智能座舱、安全与服务体验，与中东用户关心的长途便利、高温环境适应和家庭舒适结合。该主线建立在 AITO 的中东本地化车型、UAE 合作渠道与在地准备之上。",
+    "localization_advice": "Tone: premium、restrained、engineering-led、service-backed. Emphasize: - Gulf-ready 本地化。\n- 阿语 / 英语交互与本地数字生态。\n- 旗舰安全、舒适与智能座舱。\n- 渠道、售后、中央仓和零件保障。\nAvoid: - Huawei-owned brand\n- self-driving / autonomous\n- already on sale in Europe\n- global No.1 luxury brand\n- zero anxiety",
+    "risk_notes": [
+      "误写华为关系: 统一使用 under SERES Group / part of the HIMA ecosystem 等表述。",
+      "把 ADS 写成自动驾驶: 统一写 intelligent driving assistance / advanced driver assistance。",
+      "夸大海外落地范围: 只写 entering / expanding into 指定市场，不写 broad global rollout。",
+      "直接套用中国销量、排名和 CLTC 续航: 所有成绩加地区限定，所有续航加测试口径说明。",
+      "忽视残值、保险、售后和折旧担忧: 把本地服务、零件、体验中心和伙伴背书写入传播主轴。",
+      "对抗式文化和地缘政治表达: 坚持 premium、user-first、本地伙伴共建的表达框架。"
+    ],
+    "headline_directions": [
+      "为海湾而来的智能新豪华 SUV",
+      "把智能豪华带到 UAE，而不是把中国版本原样外运",
+      "新豪华，不止于电动"
+    ]
+  },
+  "draft": {
+    "title_options": [
+      "AITO Brings Gulf-Ready Intelligent Luxury SUV Experience to the UAE",
+      "From China Proof to Gulf Trust: AITO Prepares a Localized UAE Luxury SUV Story",
+      "AITO Introduces a New Intelligent Luxury Narrative for UAE Families and Executives",
+      "Gulf-Ready by Design: AITO Focuses on Comfort, Intelligence, and Local Service Confidence",
+      "AITO Sets Out a Premium, Service-Backed Approach for the UAE Intelligent SUV Market"
+    ],
+    "press_release": "# AITO Brings Gulf-Ready Intelligent Luxury SUV Experience to the UAE\n\n**Dubai, UAE - [Date]** - AITO, the premium intelligent vehicle brand under SERES Group, is preparing to bring its intelligent luxury SUV experience to the UAE, with a localized market approach built around family comfort, executive mobility, advanced driver assistance, and local service readiness.\n\nThe UAE launch narrative centers on AITO 9, AITO 7, AITO 5, a product family designed to combine spacious SUV comfort, intelligent cabin experiences, safety-focused driver assistance, and long-distance confidence for Gulf users. Rather than introducing a vehicle as a simple export product, AITO's UAE story is about adapting intelligent new luxury to local expectations around family travel, high-temperature environments, premium service, and trusted ownership support.\n\n\"The UAE is one of the most important markets for intelligent luxury mobility in the Gulf,\" said [Spokesperson Name], [Title]. \"Our priority is not only to introduce advanced products, but also to work with local partners to build a long-term ownership experience around safety, comfort, intelligent features, and service confidence.\"\n\nAccording to the prepared market intelligence, UAE premium SUV buyers are increasingly open to new intelligent vehicle choices, while still placing strong emphasis on after-sales service, parts availability, resale confidence, and real-world usability. AITO's communication strategy should therefore connect China-market product proof with local trust-building, including partner support, Gulf-ready localization, and a restrained premium tone.\n\nThe localized PR direction emphasizes three messages:\n\n1. **Intelligent new luxury for Gulf families and executives** - AITO should be presented as a premium SUV experience that brings together comfort, safety, digital cabin features, and advanced driver assistance.\n2. **From China proof to Gulf trust** - China-market recognition may be used as credibility, but every ranking or delivery proof point should be clearly qualified by market and segment.\n3. **Local readiness matters** - The UAE story should highlight verified local cooperation, customer touchpoints, and service preparation instead of relying only on technology claims.\n\nAITO should avoid describing its advanced driver assistance capabilities as autonomous driving. All local feature availability, range, configuration, delivery timing, and pricing should be subject to official local confirmation and applicable regulations.\n\nThe first phase of communication is recommended for automotive, business, technology, and premium lifestyle media, supported by dealer-led test-drive experiences and localized digital content for English and Arabic-speaking audiences.\n\n## About AITO\nAITO is the premium intelligent vehicle brand under SERES Group. In China, AITO products are part of the HIMA ecosystem. The brand focuses on combining vehicle engineering, intelligent cabin experiences, advanced driver assistance, safety, and premium comfort for next-generation mobility users.\n\n## Media Contact\n[Media Contact Name]\n[Email]\n[Phone]",
+    "social_captions": [
+      "AITO's UAE story is not only about intelligent vehicles. It is about building Gulf-ready luxury around family comfort, advanced assistance, and local service trust.",
+      "From China proof to Gulf trust: AITO is preparing a localized intelligent luxury SUV narrative for UAE premium mobility users.",
+      "For UAE families and executives, intelligent luxury must feel comfortable, useful, and locally supported. That is the PR direction behind AITO's Gulf-ready story."
+    ],
+    "media_pitch_email": "Subject: Story idea - AITO's Gulf-ready intelligent luxury SUV narrative for the UAE\n\nHi [Journalist Name],\n\nI am reaching out with a story idea on AITO's localized UAE market-entry narrative. The angle is not another generic EV launch, but how a premium intelligent SUV brand under SERES Group can translate China-market product proof into Gulf-market trust through local partnership, family comfort, advanced driver assistance, and service readiness.\n\nWould you be open to reviewing the press release or speaking with a spokesperson about AITO's approach to intelligent new luxury for UAE premium SUV buyers?\n\nBest,\n[Your Name]",
+    "chinese_strategy_summary": "本次 PR 不应写成“华为汽车出海”或“又一个中国电动车进入海外”，而应定位为：问界 / AITO 在赛力斯集团品牌与 HIMA 生态能力基础上，把中国市场的产品证明转化为 UAE 市场的本地信任。传播主线应围绕 Gulf-ready 智能新豪华 SUV、家庭与商务双场景、长途便利、本地伙伴与售后服务准备展开。所有 ADS、销量、排名、续航、上市范围都必须加限定，避免自动驾驶、全球第一、已全面进入欧洲等高风险表述。",
+    "model_used": "local-template-fallback",
+    "fallback_mode": true
+  },
+  "expert_reviews": [
+    {
+      "reviewer": "Content Review Agent",
+      "role": "Checks PR structure, clarity, newsworthiness, and completeness.",
+      "score": 88,
+      "strengths": [
+        "The draft is organized around a clear market-entry story.",
+        "The message connects brand, market, user value, and local readiness."
+      ],
+      "issues": [
+        "No blocking content-structure issue found in internal review."
+      ],
+      "suggestions": [
+        "Replace [Date] with the intended release date before submission to media."
+      ],
+      "risk_level": "low"
+    },
+    {
+      "reviewer": "Brand Consistency Agent",
+      "role": "Checks whether wording matches the verified brand relationship, tone, and positioning.",
+      "score": 82,
+      "strengths": [
+        "The draft follows a premium、restrained、engineering-led、service-backed tone direction.",
+        "The core angle emphasizes intelligent new luxury rather than price competition."
+      ],
+      "issues": [
+        "Risky brand or ADAS wording detected: autonomous driving"
+      ],
+      "suggestions": [
+        "Use: AITO is the premium intelligent vehicle brand under SERES Group; in China, AITO products are part of the HIMA ecosystem."
+      ],
+      "risk_level": "high"
+    },
+    {
+      "reviewer": "Creative Insight Agent",
+      "role": "Evaluates whether the story is distinctive, locally relevant, and media-pitchable.",
+      "score": 90,
+      "strengths": [
+        "The PR angle is more specific than a generic EV launch story.",
+        "It turns technical intelligence into a local lifestyle and service-readiness narrative."
+      ],
+      "issues": [
+        "No blocking creative issue found in internal review."
+      ],
+      "suggestions": [
+        "Lead with a Gulf use case: family comfort, executive travel, long-distance confidence, and local service trust.",
+        "Use one memorable phrase consistently, such as 'From China proof to Gulf trust'."
+      ],
+      "risk_level": "low"
+    },
+    {
+      "reviewer": "Legal Risk Agent",
+      "role": "Performs a lightweight risk screen; not a legal opinion.",
+      "score": 94,
+      "strengths": [
+        "The system separates lightweight risk screening from real legal approval.",
+        "The draft uses cautious launch and availability language."
+      ],
+      "issues": [
+        "Verification pass: no obvious prohibited wording found by internal rules."
+      ],
+      "suggestions": [
+        "误写华为关系: 统一使用 under SERES Group / part of the HIMA ecosystem 等表述。",
+        "把 ADS 写成自动驾驶: 统一写 intelligent driving assistance / advanced driver assistance。",
+        "夸大海外落地范围: 只写 entering / expanding into 指定市场，不写 broad global rollout。",
+        "直接套用中国销量、排名和 CLTC 续航: 所有成绩加地区限定，所有续航加测试口径说明。"
+      ],
+      "risk_level": "low"
+    }
+  ],
+  "revised_draft": null,
+  "human_feedback": "",
+  "compliance_status": "Verification Pass - lightweight risk notice only",
+  "generated_at": "2026-05-08T14:39:21"
+}

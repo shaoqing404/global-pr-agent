@@ -1,0 +1,85 @@
+{
+  "United States": {
+    "language_hint": "English",
+    "media_style": "direct, benefit-led, evidence-based, concise headline",
+    "cultural_notes": [
+      "Lead with measurable customer value and proof points.",
+      "Avoid exaggerated superlatives unless supported by data.",
+      "Include availability, pricing or official website when possible."
+    ],
+    "channels": ["BusinessWire", "PR Newswire", "LinkedIn", "X", "industry media"],
+    "risk_notes": ["Avoid unverified performance claims.", "Avoid absolute claims such as best, guaranteed, number one."]
+  },
+  "United Kingdom": {
+    "language_hint": "English",
+    "media_style": "measured, credible, practical, with understated tone",
+    "cultural_notes": [
+      "Use a restrained tone and avoid over-selling.",
+      "Show local relevance and customer benefit early."
+    ],
+    "channels": ["PR Newswire UK", "LinkedIn", "trade media", "founder commentary"],
+    "risk_notes": ["Avoid unsupported leadership claims.", "Check advertising and consumer protection wording."]
+  },
+  "Singapore": {
+    "language_hint": "English",
+    "media_style": "regional, business-oriented, innovation and trust focused",
+    "cultural_notes": [
+      "Highlight Southeast Asia relevance and regional scalability.",
+      "Emphasize compliance, reliability and partner ecosystem."
+    ],
+    "channels": ["e27", "Tech in Asia", "LinkedIn", "regional tech media"],
+    "risk_notes": ["Avoid treating Southeast Asia as one uniform market.", "Be precise about market availability."]
+  },
+  "Japan": {
+    "language_hint": "Japanese",
+    "media_style": "polite, trust-building, detailed, risk-aware",
+    "cultural_notes": [
+      "Emphasize quality, reliability, service support and long-term trust.",
+      "Use respectful and factual language.",
+      "Avoid aggressive competitor comparison."
+    ],
+    "channels": ["PR TIMES", "Nikkei-related media", "LINE", "X Japan", "industry media"],
+    "risk_notes": ["Avoid overly casual tone.", "Claims should be conservative and evidence-backed."]
+  },
+  "Indonesia": {
+    "language_hint": "Bahasa Indonesia",
+    "media_style": "accessible, community-oriented, mobile-first, social-friendly",
+    "cultural_notes": [
+      "Localize benefits around daily life, affordability and community trust.",
+      "Use clear language and avoid complex jargon.",
+      "Mobile and social channels are important."
+    ],
+    "channels": ["local tech media", "Instagram", "TikTok", "WhatsApp community", "KOL outreach"],
+    "risk_notes": ["Check local language nuance.", "Avoid sensitive cultural or religious references unless reviewed locally."]
+  },
+  "Germany": {
+    "language_hint": "German",
+    "media_style": "precise, technical, privacy-aware, proof-driven",
+    "cultural_notes": [
+      "Emphasize data protection, reliability, engineering quality and measurable benefits.",
+      "Use precise terminology and avoid hype."
+    ],
+    "channels": ["industry media", "LinkedIn", "trade press", "local PR wire"],
+    "risk_notes": ["Privacy and compliance wording must be reviewed.", "Avoid vague AI hype language."]
+  },
+  "France": {
+    "language_hint": "French",
+    "media_style": "polished, editorial, value and design oriented",
+    "cultural_notes": [
+      "Balance innovation with brand taste and local relevance.",
+      "A more editorial tone may work better than pure sales copy."
+    ],
+    "channels": ["local business media", "LinkedIn", "industry press", "creator outreach"],
+    "risk_notes": ["Avoid over-claiming market leadership.", "Check translation elegance and cultural nuance."]
+  },
+  "Brazil": {
+    "language_hint": "Portuguese",
+    "media_style": "warm, energetic, benefit-oriented, social-friendly",
+    "cultural_notes": [
+      "Emphasize accessibility, community, lifestyle and local availability.",
+      "Use an engaging but credible tone."
+    ],
+    "channels": ["local tech media", "Instagram", "TikTok", "YouTube creators", "PR wire"],
+    "risk_notes": ["Local Portuguese review is recommended.", "Avoid cultural stereotypes."]
+  }
+}

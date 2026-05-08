@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Global PR Agent — 项目设计文档</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS RESET & ROOT
+   ═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06080d;
+  --bg-card:rgba(12,16,24,0.65);
+  --bg-glass:rgba(16,20,32,0.45);
+  --border:rgba(255,255,255,0.06);
+  --border-hover:rgba(255,255,255,0.12);
+  --text:#e2e8f0;
+  --text-dim:#8892a4;
+  --text-bright:#ffffff;
+  --accent:#6366f1;
+  --accent2:#8b5cf6;
+  --accent3:#ec4899;
+  --accent-glow:rgba(99,102,241,0.3);
+  --success:#22c55e;
+  --warning:#f59e0b;
+  --danger:#ef4444;
+  --info:#3b82f6;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:15px;
+  line-height:1.7;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATED BACKGROUND
+   ═══════════════════════════════════════════ */
+.bg-canvas{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
+}
+.bg-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(120px);
+  opacity:0.35;
+  animation:orbFloat 20s ease-in-out infinite;
+}
+.bg-orb:nth-child(1){
+  width:600px;height:600px;
+  background:radial-gradient(circle,#1e1b4b,#312e81);
+  top:-10%;left:-5%;
+  animation-duration:25s;
+}
+.bg-orb:nth-child(2){
+  width:500px;height:500px;
+  background:radial-gradient(circle,#4c1d95,#581c87);
+  bottom:-15%;right:-10%;
+  animation-duration:30s;
+  animation-delay:-8s;
+}
+.bg-orb:nth-child(3){
+  width:400px;height:400px;
+  background:radial-gradient(circle,#831843,#9f1239);
+  top:40%;left:50%;
+  animation-duration:22s;
+  animation-delay:-15s;
+}
+.bg-orb:nth-child(4){
+  width:350px;height:350px;
+  background:radial-gradient(circle,#0c4a6e,#155e75);
+  top:10%;right:20%;
+  animation-duration:28s;
+  animation-delay:-5s;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(80px,-60px) scale(1.1)}
+  50%{transform:translate(-40px,80px) scale(0.9)}
+  75%{transform:translate(60px,40px) scale(1.05)}
+}
+
+/* Subtle grid */
+.bg-canvas::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+.nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:12px 24px;
+  background:rgba(6,8,13,0.7);
+  backdrop-filter:blur(24px) saturate(1.4);
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);
+  border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+.nav-logo{
+  position:absolute;
+  left:24px;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:-0.5px;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-btn{
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--text-dim);
+  padding:7px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+  font-family:var(--font);
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;
+  overflow:hidden;
+}
+.nav-btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1));
+  opacity:0;
+  transition:opacity .25s;
+  border-radius:inherit;
+}
+.nav-btn:hover{
+  color:var(--text-bright);
+  border-color:var(--border-hover);
+}
+.nav-btn:hover::before{opacity:1}
+.nav-btn.active{
+  color:var(--text-bright);
+  background:rgba(99,102,241,0.12);
+  border-color:rgba(99,102,241,0.3);
+  box-shadow:0 0 20px rgba(99,102,241,0.15);
+}
+.nav-btn.active::before{opacity:1}
+
+/* ═══════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════ */
+.main{
+  padding-top:70px;
+  min-height:100vh;
+}
+.section{
+  display:none;
+  padding:40px 24px 60px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.section.active{display:block}
+
+/* Entry animation */
+.section.active .anim-item{
+  animation:fadeUpBlur .6s cubic-bezier(.16,1,.3,1) both;
+}
+.anim-item:nth-child(1){animation-delay:.05s}
+.anim-item:nth-child(2){animation-delay:.1s}
+.anim-item:nth-child(3){animation-delay:.15s}
+.anim-item:nth-child(4){animation-delay:.2s}
+.anim-item:nth-child(5){animation-delay:.25s}
+.anim-item:nth-child(6){animation-delay:.3s}
+.anim-item:nth-child(7){animation-delay:.35s}
+.anim-item:nth-child(8){animation-delay:.4s}
+.anim-item:nth-child(9){animation-delay:.45s}
+.anim-item:nth-child(10){animation-delay:.5s}
+
+@keyframes fadeUpBlur{
+  from{opacity:0;transform:translateY(30px);filter:blur(8px)}
+  to{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+
+/* ═══════════════════════════════════════════
+   GLASS CARDS
+   ═══════════════════════════════════════════ */
+.glass-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px;
+  margin-bottom:20px;
+  backdrop-filter:blur(20px) saturate(1.2);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  position:relative;
+  overflow:hidden;
+}
+.glass-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(99,102,241,0.06), transparent 40%);
+  pointer-events:none;
+  transition:opacity .3s;
+  opacity:0;
+}
+.glass-card:hover::before{opacity:1}
+.glass-card:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════ */
+.section-title{
+  font-size:clamp(28px,4vw,42px);
+  font-weight:800;
+  letter-spacing:-1.5px;
+  margin-bottom:8px;
+  background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.section-subtitle{
+  color:var(--text-dim);
+  font-size:15px;
+  margin-bottom:36px;
+  max-width:600px;
+}
+.section-label{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--accent);
+  margin-bottom:12px;
+}
+.section-label .dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 8px var(--accent-glow);
+}
+h3{
+  font-size:16px;
+  font-weight:700;
+  color:var(--text-bright);
+  margin:24px 0 12px;
+  letter-spacing:-0.3px;
+}
+.code{
+  font-family:var(--mono);
+  font-size:12px;
+  background:rgba(99,102,241,0.1);
+  border:1px solid rgba(99,102,241,0.2);
+  padding:2px 8px;
+  border-radius:6px;
+  color:var(--accent2);
+}
+
+/* ═══════════════════════════════════════════
+   BADGES
+   ═══════════════════════════════════════════ */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 10px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.3px;
+}
+.badge-accent{background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.25)}
+.badge-success{background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
+.badge-warning{background:rgba(245,158,11,0.12);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
+.badge-danger{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
+.badge-info{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
+.badge-muted{background:rgba(255,255,255,0.05);color:var(--text-dim);border:1px solid var(--border)}
+
+/* ═══════════════════════════════════════════
+   OVERVIEW SECTION
+   ═══════════════════════════════════════════ */
+.overview-hero{
+  text-align:center;
+  padding:60px 0 40px;
+}
+.overview-hero .section-title{
+  font-size:clamp(36px,5vw,56px);
+  margin-bottom:16px;
+}
+.overview-hero .section-subtitle{
+  max-width:700px;
+  margin:0 auto 40px;
+  font-size:16px;
+}
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+  margin-bottom:40px;
+}
+.stat-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  text-align:center;
+  backdrop-filter:blur(16px);
+  transition:all .3s;
+}
+.stat-card:hover{
+  border-color:rgba(99,102,241,0.3);
+  transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.3);
+}
+.stat-num{
+  font-size:36px;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1.2;
+}
+.stat-label{
+  font-size:12px;
+  color:var(--text-dim);
+  margin-top:4px;
+  font-weight:500;
+}
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+}
+.feature-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  backdrop-filter:blur(16px);
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+}
+.feature-card::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent3));
+  opacity:0;
+  transition:opacity .3s;
+}
+.feature-card:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-2px);
+}
+.feature-card:hover::after{opacity:1}
+.feature-icon{
+  width:40px;height:40px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  margin-bottom:14px;
+}
+.feature-title{
+  font-size:15px;
+  font-weight:700;
+  color:var(--text-bright);
+  margin-bottom:6px;
+}
+.feature-desc{
+  font-size:13px;
+  color:var(--text-dim);
+  line-height:1.6;
+}
+
+/* ═══════════════════════════════════════════
+   ARCHITECTURE SECTION
+   ═══════════════════════════════════════════ */
+.arch-stack{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  position:relative;
+}
+.arch-layer{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  backdrop-filter:blur(16px);
+  position:relative;
+  transition:all .3s;
+}
+.arch-layer:hover{
+  border-color:rgba(99,102,241,0.2);
+  z-index:2;
+}
+.arch-layer-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+}
+.arch-layer-icon{
+  width:36px;height:36px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
+}
+.arch-layer-name{
+  font-size:14px;
+  font-weight:700;
+  color:var(--text-bright);
+}
+.arch-layer-tag{
+  font-size:11px;
+  font-weight:500;
+  color:var(--text-dim);
+  font-family:var(--mono);
+}
+.arch-modules{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.arch-mod{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px 14px;
+  font-size:12px;
+  font-weight:500;
+  color:var(--text);
+  transition:all .25s;
+  cursor:default;
+}
+.arch-mod:hover{
+  border-color:rgba(99,102,241,0.3);
+  background:rgba(99,102,241,0.06);
+  color:var(--text-bright);
+}
+.arch-connector{
+  display:flex;
+  justify-content:center;
+  padding:8px 0;
+  position:relative;
+}
+.arch-connector-line{
+  width:2px;
+  height:24px;
+  background:linear-gradient(to bottom,rgba(99,102,241,0.3),rgba(99,102,241,0.05));
+  position:relative;
+}
+.arch-connector-dot{
+  position:absolute;
+  bottom:-3px;
+  left:50%;
+  transform:translateX(-50%);
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 10px var(--accent-glow);
+}
+.tech-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:13px;
+}
+.tech-table th{
+  text-align:left;
+  padding:12px 16px;
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  color:var(--text-dim);
+  border-bottom:1px solid var(--border);
+}
+.tech-table td{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  vertical-align:top;
+}
+.tech-table tr:last-child td{border-bottom:none}
+.tech-table tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* ═══════════════════════════════════════════
+   DATA FLOW SECTION
+   ═══════════════════════════════════════════ */
+.flow-timeline{
+  position:relative;
+  padding-left:40px;
+}
+.flow-timeline::before{
+  content:'';
+  position:absolute;
+  left:15px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom,var(--accent),var(--accent2),var(--accent3),var(--success));
+  opacity:0.3;
+}
+.flow-step{
+  position:relative;
+  margin-bottom:20px;
+  padding:20px 24px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  backdrop-filter:blur(16px);
+  transition:all .3s;
+}
+.flow-step:hover{
+  border-color:rgba(99,102,241,0.25);
+  transform:translateX(4px);
+}
+.flow-step::before{
+  content:'';
+  position:absolute;
+  left:-33px;
+  top:24px;
+  width:12px;height:12px;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  background:var(--bg);
+  z-index:1;
+  transition:all .3s;
+}
+.flow-step:hover::before{
+  background:var(--accent);
+  box-shadow:0 0 12px var(--accent-glow);
+}
+.flow-step-num{
+  position:absolute;
+  left:-48px;
+  top:20px;
+  font-size:10px;
+  font-weight:700;
+  color:var(--accent);
+  font-family:var(--mono);
+}
+.flow-step-title{
+  font-size:14px;
+  font-weight:700;
+  color:var(--text-bright);
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.flow-step-desc{
+  font-size:13px;
+  color:var(--text-dim);
+  line-height:1.6;
+}
+.flow-step-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+}
+
+/* ═══════════════════════════════════════════
+   STATE MACHINE SECTION
+   ═══════════════════════════════════════════ */
+.sm-container{
+  position:relative;
+  padding:20px 0;
+}
+.sm-canvas{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+.sm-row{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.sm-node{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px 24px;
+  min-width:200px;
+  max-width:260px;
+  text-align:center;
+  backdrop-filter:blur(16px);
+  transition:all .35s;
+  position:relative;
+  cursor:default;
+}
+.sm-node::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:conic-gradient(from var(--angle,0deg),transparent,rgba(99,102,241,0.3),transparent,transparent);
+  opacity:0;
+  transition:opacity .4s;
+  z-index:-1;
+}
+.sm-node:hover{
+  border-color:rgba(99,102,241,0.4);
+  transform:scale(1.05);
+  box-shadow:0 0 30px rgba(99,102,241,0.15);
+}
+.sm-node:hover::before{opacity:1}
+.sm-node-state{
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--accent);
+  margin-bottom:6px;
+  font-family:var(--mono);
+}
+.sm-node-name{
+  font-size:14px;
+  font-weight:700;
+  color:var(--text-bright);
+  margin-bottom:6px;
+}
+.sm-node-desc{
+  font-size:11px;
+  color:var(--text-dim);
+  line-height:1.5;
+}
+.sm-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 0;
+}
+.sm-arrow svg{
+  width:20px;height:20px;
+  color:var(--accent);
+  opacity:0.4;
+}
+.sm-arrow-h{
+  display:flex;
+  align-items:center;
+  padding:0 4px;
+}
+.sm-arrow-h svg{
+  width:24px;height:24px;
+  color:var(--accent);
+  opacity:0.4;
+}
+.sm-transition-table{
+  margin-top:32px;
+}
+
+/* ═══════════════════════════════════════════
+   AGENTS SECTION
+   ═══════════════════════════════════════════ */
+.agent-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+  gap:16px;
+}
+.agent-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  backdrop-filter:blur(16px);
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+}
+.agent-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  border-radius:14px 14px 0 0;
+  transition:opacity .3s;
+}
+.agent-card:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.3);
+}
+.agent-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+}
+.agent-avatar{
+  width:42px;height:42px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+.agent-name{
+  font-size:15px;
+  font-weight:700;
+  color:var(--text-bright);
+}
+.agent-module{
+  font-size:11px;
+  color:var(--text-dim);
+  font-family:var(--mono);
+}
+.agent-desc{
+  font-size:13px;
+  color:var(--text-dim);
+  line-height:1.6;
+  margin-bottom:14px;
+}
+.agent-io{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.agent-io-label{
+  font-size:10px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--text-dim);
+  margin-bottom:6px;
+}
+
+/* Expert reviewers grid */
+.expert-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+.expert-card{
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px;
+  transition:all .3s;
+}
+.expert-card:hover{
+  border-color:rgba(99,102,241,0.2);
+  background:rgba(99,102,241,0.04);
+}
+.expert-role{
+  font-size:13px;
+  font-weight:700;
+  color:var(--text-bright);
+  margin-bottom:4px;
+}
+.expert-duty{
+  font-size:11px;
+  color:var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════
+   MIGRATION SECTION
+   ═══════════════════════════════════════════ */
+.migration-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:20px;
+}
+.migration-tab{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 20px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-dim);
+  cursor:pointer;
+  transition:all .25s;
+  font-family:var(--font);
+}
+.migration-tab:hover{
+  border-color:var(--border-hover);
+  color:var(--text);
+}
+.migration-tab.active{
+  background:rgba(99,102,241,0.12);
+  border-color:rgba(99,102,241,0.3);
+  color:var(--text-bright);
+}
+.migration-panel{
+  display:none;
+}
+.migration-panel.active{display:block}
+
+.migration-flow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.mf-node{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 20px;
+  font-size:13px;
+  font-weight:500;
+  color:var(--text);
+  transition:all .25s;
+  text-align:center;
+}
+.mf-node:hover{
+  border-color:rgba(99,102,241,0.3);
+  background:rgba(99,102,241,0.06);
+}
+.mf-node.highlight{
+  border-color:rgba(99,102,241,0.4);
+  background:rgba(99,102,241,0.08);
+  color:var(--text-bright);
+}
+.mf-node.future{
+  border-style:dashed;
+  color:var(--text-dim);
+}
+.mf-arrow{
+  color:var(--accent);
+  opacity:0.4;
+  font-size:18px;
+}
+.mf-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ═══════════════════════════════════════════
+   GUIDE & LIMITS SECTION
+   ═══════════════════════════════════════════ */
+.status-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.status-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--border);
+  border-radius:10px;
+  transition:all .25s;
+}
+.status-item:hover{
+  background:rgba(255,255,255,0.04);
+  border-color:var(--border-hover);
+}
+.status-icon{
+  width:28px;height:28px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  flex-shrink:0;
+}
+.status-text{
+  font-size:13px;
+  font-weight:500;
+  color:var(--text);
+  flex:1;
+}
+.status-badge{
+  flex-shrink:0;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════ */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS - STATE MACHINE SVG
+   ═══════════════════════════════════════════ */
+.sm-svg-container{
+  width:100%;
+  overflow-x:auto;
+  padding:20px 0;
+}
+.sm-svg-container svg{
+  display:block;
+  margin:0 auto;
+}
+
+/* Animated dash for state machine connections */
+@keyframes dashFlow{
+  to{stroke-dashoffset:-20}
+}
+.sm-line-animated{
+  stroke-dasharray:6,4;
+  animation:dashFlow 1s linear infinite;
+}
+
+/* Pulse for active nodes */
+@keyframes nodePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,0.2)}
+  50%{box-shadow:0 0 0 8px rgba(99,102,241,0)}
+}
+.sm-node.active-node{
+  animation:nodePulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media(max-width:768px){
+  .nav{padding:10px 12px;gap:2px;overflow-x:auto;justify-content:flex-start}
+  .nav-logo{display:none}
+  .nav-btn{padding:6px 12px;font-size:12px;white-space:nowrap}
+  .section{padding:24px 16px 40px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .agent-grid{grid-template-columns:1fr}
+  .sm-row{flex-direction:column}
+  .flow-timeline{padding-left:32px}
+}
+
+/* ═══════════════════════════════════════════
+   MOUSE GLOW CURSOR
+   ═══════════════════════════════════════════ */
+.cursor-glow{
+  position:fixed;
+  width:300px;height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,0.06),transparent 70%);
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:left .1s,top .1s;
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-canvas">
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+</div>
+
+<!-- Cursor glow -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="mainNav">
+  <span class="nav-logo">GLOBAL PR AGENT</span>
+  <button class="nav-btn active" data-section="overview">系统总览</button>
+  <button class="nav-btn" data-section="architecture">系统架构</button>
+  <button class="nav-btn" data-section="dataflow">数据流</button>
+  <button class="nav-btn" data-section="statemachine">状态机</button>
+  <button class="nav-btn" data-section="agents">Agents</button>
+  <button class="nav-btn" data-section="migration">平台迁移</button>
+  <button class="nav-btn" data-section="guide">部署与规划</button>
+</nav>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- ═══ 系统总览 ═══ -->
+  <div class="section active" id="sec-overview">
+    <div class="overview-hero anim-item">
+      <div class="section-label"><span class="dot"></span> 系统总览</div>
+      <h1 class="section-title">Global PR Agent</h1>
+      <p class="section-subtitle">AI 驱动的端到端新闻稿生成平台，集成多 Agent 审阅、品牌情报提取与多语言导出能力。</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card anim-item">
+        <div class="stat-num">6</div>
+        <div class="stat-label">工作流状态</div>
+      </div>
+      <div class="stat-card anim-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">专家审阅 Agent</div>
+      </div>
+      <div class="stat-card anim-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">架构分层</div>
+      </div>
+      <div class="stat-card anim-item">
+        <div class="stat-num">6</div>
+        <div class="stat-label">API 端点</div>
+      </div>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card anim-item">
+        <div class="feature-icon" style="background:rgba(99,102,241,0.12)">&#x1F4AC;</div>
+        <div class="feature-title">对话式工作流</div>
+        <div class="feature-desc">ChatBot 驱动的 PR 生成流程，每个关键节点均需人类确认，确保 Human-in-the-Loop。</div>
+      </div>
+      <div class="feature-card anim-item">
+        <div class="feature-icon" style="background:rgba(139,92,246,0.12)">&#x1F9E0;</div>
+        <div class="feature-title">LLM 情报提取</div>
+        <div class="feature-desc">上传品牌文档后由 LLM 自动解析，Pydantic 严格校验输出结构，保证数据质量。</div>
+      </div>
+      <div class="feature-card anim-item">
+        <div class="feature-icon" style="background:rgba(236,72,153,0.12)">&#x1F50D;</div>
+        <div class="feature-title">多专家审阅</div>
+        <div class="feature-desc">四位专职 AI Agent 并行审阅内容，覆盖品牌、法务、创意与结构完整性。</div>
+      </div>
+      <div class="feature-card anim-item">
+        <div class="feature-icon" style="background:rgba(34,197,94,0.12)">&#x1F30D;</div>
+        <div class="feature-title">多语言导出</div>
+        <div class="feature-desc">支持阿拉伯语、法语、德语等多语种翻译本土化，导出 DOCX / JSON / Markdown。</div>
+      </div>
+      <div class="feature-card anim-item">
+        <div class="feature-icon" style="background:rgba(245,158,11,0.12)">&#x1F504;</div>
+        <div class="feature-title">确定性降级</div>
+        <div class="feature-desc">未配置 API Key 时自动切换至模板引擎，全链路可演示，不中断。</div>
+      </div>
+      <div class="feature-card anim-item">
+        <div class="feature-icon" style="background:rgba(59,130,246,0.12)">&#x1F310;</div>
+        <div class="feature-title">平台无关</div>
+        <div class="feature-desc">可部署至 Dify、Coze、n8n 或独立 FastAPI 服务，OpenAI 兼容模型接口。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 系统架构 ═══ -->
+  <div class="section" id="sec-architecture">
+    <div class="anim-item">
+      <div class="section-label"><span class="dot"></span> 分层架构</div>
+      <h1 class="section-title">Architecture</h1>
+      <p class="section-subtitle">五层架构设计，确保关注点分离与最大可扩展性。</p>
+    </div>
+
+    <div class="arch-stack">
+      <div class="arch-layer anim-item" style="--layer-color:#818cf8">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon" style="background:rgba(99,102,241,0.15)">&#x1F5A5;</div>
+          <div>
+            <div class="arch-layer-name">交互层 (Presentation)</div>
+            <div class="arch-layer-tag">UI / 用户交互</div>
+          </div>
+        </div>
+        <div class="arch-modules">
+          <span class="arch-mod">app_chat.py &middot; Streamlit ChatBot</span>
+          <span class="arch-mod">app.py &middot; Tab 版 (兼容保留)</span>
+          <span class="arch-mod">cli.py &middot; 命令行工具</span>
+        </div>
+      </div>
+      <div class="arch-connector anim-item"><div class="arch-connector-line"><div class="arch-connector-dot"></div></div></div>
+
+      <div class="arch-layer anim-item">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon" style="background:rgba(139,92,246,0.15)">&#x2699;</div>
+          <div>
+            <div class="arch-layer-name">编排层 (Orchestration)</div>
+            <div class="arch-layer-tag">工作流引擎</div>
+          </div>
+        </div>
+        <div class="arch-modules">
+          <span class="arch-mod">orchestrator.py &middot; 工作流引擎</span>
+          <span class="arch-mod">reviewers.py &middot; 四专家审定</span>
+          <span class="arch-mod">report_loader.py &middot; 情报解析</span>
+        </div>
+      </div>
+      <div class="arch-connector anim-item"><div class="arch-connector-line"><div class="arch-connector-dot"></div></div></div>
+
+      <div class="arch-layer anim-item">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon" style="background:rgba(236,72,153,0.15)">&#x1F916;</div>
+          <div>
+            <div class="arch-layer-name">模型层 (Model)</div>
+            <div class="arch-layer-tag">LLM 接口</div>
+          </div>
+        </div>
+        <div class="arch-modules">
+          <span class="arch-mod">llm_client.py &middot; OpenAI 兼容</span>
+          <span class="arch-mod">DeepSeek / GPT-4o / 任意兼容模型</span>
+          <span class="arch-mod">确定性降级引擎 (无 Key 兜底)</span>
+        </div>
+      </div>
+      <div class="arch-connector anim-item"><div class="arch-connector-line"><div class="arch-connector-dot"></div></div></div>
+
+      <div class="arch-layer anim-item">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon" style="background:rgba(34,197,94,0.15)">&#x1F4E6;</div>
+          <div>
+            <div class="arch-layer-name">数据契约层 (Schema)</div>
+            <div class="arch-layer-tag">Pydantic 数据模型</div>
+          </div>
+        </div>
+        <div class="arch-modules">
+          <span class="arch-mod">schemas.py &middot; Pydantic v2 Models</span>
+          <span class="arch-mod">TaskMetadata</span>
+          <span class="arch-mod">InformationSearchReport</span>
+          <span class="arch-mod">PRInsight</span>
+          <span class="arch-mod">PRDraftPackage</span>
+          <span class="arch-mod">ExpertReview</span>
+          <span class="arch-mod">WorkflowResult</span>
+        </div>
+      </div>
+      <div class="arch-connector anim-item"><div class="arch-connector-line"><div class="arch-connector-dot"></div></div></div>
+
+      <div class="arch-layer anim-item">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon" style="background:rgba(59,130,246,0.15)">&#x1F310;</div>
+          <div>
+            <div class="arch-layer-name">服务层 (Service)</div>
+            <div class="arch-layer-tag">API 与导出</div>
+          </div>
+        </div>
+        <div class="arch-modules">
+          <span class="arch-mod">api_server.py &middot; FastAPI</span>
+          <span class="arch-mod">exporter.py &middot; MD / JSON / DOCX</span>
+          <span class="arch-mod">DEMO_ACCESS_TOKEN 轻量鉴权</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="anim-item">技术选型</h3>
+    <div class="glass-card anim-item">
+      <table class="tech-table">
+        <thead>
+          <tr><th>层级</th><th>选型</th><th>理由</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-accent">UI</span></td><td>Streamlit</td><td>快速原型开发，原生支持 chat_message 与 file_uploader</td></tr>
+          <tr><td><span class="badge badge-info">API</span></td><td>FastAPI</td><td>自动生成 OpenAPI 文档，便于 Dify / n8n 集成</td></tr>
+          <tr><td><span class="badge badge-warning">Model</span></td><td>OpenAI 兼容</td><td>一套接口对接 DeepSeek / GPT / 私有网关</td></tr>
+          <tr><td><span class="badge badge-success">Schema</span></td><td>Pydantic v2</td><td>严格数据契约，Fallback 时保证结构稳定</td></tr>
+          <tr><td><span class="badge badge-danger">Export</span></td><td>python-docx</td><td>零依赖生成 Word，兼容性最佳</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ 数据流 ═══ -->
+  <div class="section" id="sec-dataflow">
+    <div class="anim-item">
+      <div class="section-label"><span class="dot"></span> 数据管线</div>
+      <h1 class="section-title">Data Flow</h1>
+      <p class="section-subtitle">从用户输入到多格式导出的端到端管线，每个阶段均经过 Pydantic 校验。</p>
+    </div>
+
+    <div class="flow-timeline">
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">01</span>
+        <div class="flow-step-title">&#x1F464; 用户输入任务目标</div>
+        <div class="flow-step-desc">用户通过对话界面定义 PR 任务目标，LLM 自动提取结构化 <code class="code">TaskMetadata</code>，并生成澄清问题。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-accent">Pydantic 校验</span>
+          <span class="badge badge-muted">LLM 提取</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">02</span>
+        <div class="flow-step-title">&#x1F4C4; 品牌情报提取</div>
+        <div class="flow-step-desc">上传品牌情报文档，通过 <code class="code">extract_from_document_via_llm()</code> 解析，输出 <code class="code">InformationSearchReport</code> JSON 结构。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-accent">LLM 解析</span>
+          <span class="badge badge-success">JSON Schema</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">03</span>
+        <div class="flow-step-title">&#x1F91D; 人类确认策略</div>
+        <div class="flow-step-desc">人类审阅提取的情报内容，确认或调整策略方向，结果捕获为 <code class="code">HumanConfirmation</code> Pydantic 模型。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-warning">Human-in-the-Loop</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">04</span>
+        <div class="flow-step-title">&#x1F3AF; Director 洞察生成</div>
+        <div class="flow-step-desc"><code class="code">run_pr_director_insight()</code> 输出品牌洞察、市场分析、PR 叙事方向、本土化建议与风险注记，生成 <code class="code">PRInsight</code>。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-accent">五维分析</span>
+          <span class="badge badge-muted">PRInsight 模型</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">05</span>
+        <div class="flow-step-title">&#x270D; PR 稿件生成</div>
+        <div class="flow-step-desc"><code class="code">run_pr_generation()</code> 生成完整 <code class="code">PRDraftPackage</code>：正文稿件、5 个标题选项、3 条社媒文案、媒体 Pitch Email、中文策略摘要。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-success">多格式输出</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">06</span>
+        <div class="flow-step-title">&#x1F50D; 四专家审阅 (x4)</div>
+        <div class="flow-step-desc"><code class="code">run_all_reviews()</code> 并行调用四个专职 Agent，每个返回结构化 <code class="code">ExpertReview</code>，包含评分、问题与建议。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-danger">内容审阅</span>
+          <span class="badge badge-warning">品牌审阅</span>
+          <span class="badge badge-info">创意审阅</span>
+          <span class="badge badge-muted">法务审阅</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">07</span>
+        <div class="flow-step-title">&#x1F504; 修订与翻译</div>
+        <div class="flow-step-desc"><code class="code">run_revision()</code> 整合专家反馈进行 LLM 修订，自动检测翻译意图（阿拉伯语 / 法语 / 德语等），动态切换 Prompt。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-accent">多语言</span>
+          <span class="badge badge-muted">反馈整合</span>
+        </div>
+      </div>
+
+      <div class="flow-step anim-item">
+        <span class="flow-step-num">08</span>
+        <div class="flow-step-title">&#x1F4E6; 导出</div>
+        <div class="flow-step-desc">最终 <code class="code">WorkflowResult</code> 导出为 DOCX、JSON 或 Markdown，全链路完成，结构化输出就绪。</div>
+        <div class="flow-step-tags">
+          <span class="badge badge-success">DOCX</span>
+          <span class="badge badge-info">JSON</span>
+          <span class="badge badge-accent">Markdown</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="anim-item">降级策略</h3>
+    <div class="glass-card anim-item">
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.7">
+        每个 LLM 调用节点均内置 <code class="code">force_fallback</code> 开关。未配置 <code class="code">LLM_API_KEY</code> 时，系统自动切换至确定性模板引擎，保证全链路可演示。情报提取失败时回退至内置问界样例报告。
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══ 状态机 ═══ -->
+  <div class="section" id="sec-statemachine">
+    <div class="anim-item">
+      <div class="section-label"><span class="dot"></span> 对话状态机</div>
+      <h1 class="section-title">State Machine</h1>
+      <p class="section-subtitle">ChatBot 对话生命周期的六个核心状态，具有确定性转换路径。</p>
+    </div>
+
+    <div class="sm-container anim-item">
+      <div class="sm-canvas">
+        <!-- Row 1: Welcome -->
+        <div class="sm-row">
+          <div class="sm-node" id="sm-welcome">
+            <div class="sm-node-state">State -1</div>
+            <div class="sm-node-name">WELCOME</div>
+            <div class="sm-node-desc">欢迎落地页，选择数据来源（样例 / 上传）。</div>
+          </div>
+        </div>
+        <div class="sm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <!-- Row 2: Task Start -->
+        <div class="sm-row">
+          <div class="sm-node" id="sm-task-start">
+            <div class="sm-node-state">State 0</div>
+            <div class="sm-node-name">TASK_START</div>
+            <div class="sm-node-desc">收集任务目标，LLM 提取 TaskMetadata，生成澄清问题。</div>
+          </div>
+        </div>
+        <div class="sm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <!-- Row 3: Intelligence Input -->
+        <div class="sm-row">
+          <div class="sm-node" id="sm-intelligence">
+            <div class="sm-node-state">State 1</div>
+            <div class="sm-node-name">INTELLIGENCE_INPUT</div>
+            <div class="sm-node-desc">接收澄清回答，确认情报底座，进入业务决策阶段。</div>
+          </div>
+        </div>
+        <div class="sm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <!-- Row 4: Business Confirm -->
+        <div class="sm-row">
+          <div class="sm-node" id="sm-business">
+            <div class="sm-node-state">State 2</div>
+            <div class="sm-node-name">BUSINESS_CONFIRM</div>
+            <div class="sm-node-desc">展示推荐策略，人类调整或确认，触发 Director Insight。</div>
+          </div>
+        </div>
+        <div class="sm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+
+        <!-- Row 5: Director Insight & Feedback Revise -->
+        <div class="sm-row">
+          <div class="sm-node" id="sm-director">
+            <div class="sm-node-state">State 3</div>
+            <div class="sm-node-name">DIRECTOR_INSIGHT</div>
+            <div class="sm-node-desc">输出品牌/市场洞察，等待用户触发生成指令。</div>
+          </div>
+          <div class="sm-arrow-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div class="sm-node active-node" id="sm-feedback">
+            <div class="sm-node-state">State 4</div>
+            <div class="sm-node-name">FEEDBACK_REVISE</div>
+            <div class="sm-node-desc">多轮修订 + 翻译本土化循环，"导出"触发文件生成。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="anim-item">状态转换规则</h3>
+    <div class="glass-card anim-item">
+      <table class="tech-table">
+        <thead>
+          <tr><th>当前状态</th><th>触发词示例</th><th>目标状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-muted">WELCOME</span></td><td>点击卡片</td><td><span class="badge badge-accent">TASK_START</span></td></tr>
+          <tr><td><span class="badge badge-accent">TASK_START</span></td><td>任何非空输入</td><td><span class="badge badge-info">INTELLIGENCE_INPUT</span></td></tr>
+          <tr><td><span class="badge badge-info">INTELLIGENCE_INPUT</span></td><td>确认 / 跳过 / ok / 开始</td><td><span class="badge badge-warning">BUSINESS_CONFIRM</span></td></tr>
+          <tr><td><span class="badge badge-warning">BUSINESS_CONFIRM</span></td><td>确认 / ok / 好的</td><td><span class="badge badge-success">DIRECTOR_INSIGHT</span></td></tr>
+          <tr><td><span class="badge badge-success">DIRECTOR_INSIGHT</span></td><td>生成 / 确认 / ok</td><td><span class="badge badge-danger">FEEDBACK_REVISE</span></td></tr>
+          <tr><td><span class="badge badge-danger">FEEDBACK_REVISE</span></td><td>导出 / export / 完成</td><td><span class="badge badge-muted">终态 &rarr; 下载文件</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ Agent 设计 ═══ -->
+  <div class="section" id="sec-agents">
+    <div class="anim-item">
+      <div class="section-label"><span class="dot"></span> 多 Agent 系统</div>
+      <h1 class="section-title">Agents</h1>
+      <p class="section-subtitle">专职 AI Agent 通过结构化数据契约协作，实现高质量 PR 生成。</p>
+    </div>
+
+    <div class="agent-grid">
+      <!-- PR Director -->
+      <div class="agent-card anim-item" style="--agent-color:#818cf8">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#818cf8,#6366f1);border-radius:14px 14px 0 0"></div>
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:rgba(99,102,241,0.15)">&#x1F3AF;</div>
+          <div>
+            <div class="agent-name">PR Director 洞察 Agent</div>
+            <div class="agent-module">orchestrator.py &middot; run_pr_director_insight()</div>
+          </div>
+        </div>
+        <div class="agent-desc">综合品牌情报、市场上下文与人类确认，输出五维战略洞察：品牌定位、市场分析、PR 叙事方向、本土化建议与风险注记。</div>
+        <div class="agent-io">
+          <div style="flex:1">
+            <div class="agent-io-label">输入</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="badge badge-muted">TaskMetadata</span>
+              <span class="badge badge-muted">InfoReport</span>
+              <span class="badge badge-muted">HumanConfirm</span>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div class="agent-io-label">输出</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="badge badge-accent">PRInsight</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PR Writer -->
+      <div class="agent-card anim-item" style="--agent-color:#a78bfa">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,#8b5cf6);border-radius:14px 14px 0 0"></div>
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:rgba(139,92,246,0.15)">&#x270D;</div>
+          <div>
+            <div class="agent-name">PR Writer 生成 Agent</div>
+            <div class="agent-module">orchestrator.py &middot; run_pr_generation()</div>
+          </div>
+        </div>
+        <div class="agent-desc">生成完整新闻稿包：正文稿件、5 个标题选项、3 条社媒文案、媒体 Pitch Email、中文策略摘要文档。</div>
+        <div class="agent-io">
+          <div style="flex:1">
+            <div class="agent-io-label">输入</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="badge badge-muted">PRInsight</span>
+              <span class="badge badge-muted">TaskMetadata</span>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div class="agent-io-label">输出</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="badge badge-accent">PRDraftPackage</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revision Agent -->
+      <div class="agent-card anim-item" style="--agent-color:#f472b6">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f472b6,#ec4899);border-radius:14px 14px 0 0"></div>
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:rgba(236,72,153,0.15)">&#x1F504;</div>
+          <div>
+            <div class="agent-name">修订与翻译 Agent</div>
+            <div class="agent-module">orchestrator.py &middot; run_revision()</div>
+          </div>
+        </div>
+        <div class="agent-desc">整合专家审阅反馈进行迭代修订，自动检测翻译意图，动态切换 System Prompt，支持阿拉伯语、法语、德语等多语种本土化。</div>
+        <div class="agent-io">
+          <div style="flex:1">
+            <div class="agent-io-label">输入</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="badge badge-muted">PRDraftPackage</span>
+              <span class="badge badge-muted">ExpertReview[]</span>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div class="agent-io-label">输出</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="badge badge-accent">修订后 PR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expert Reviewers -->
+    <h3 class="anim-item">专家审阅面板</h3>
+    <div class="glass-card anim-item">
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px">
+        <code class="code">reviewers.py</code> &middot; <code class="code">run_all_reviews()</code> &mdash; 四位专职 Agent 并行执行，每个返回结构化 <code class="code">ExpertReview</code>，包含评分、识别问题与可执行建议。
+      </p>
+      <div class="expert-grid">
+        <div class="expert-card">
+          <div class="expert-role">&#x1F4DD; 内容审阅 Agent</div>
+          <div class="expert-duty">结构完整性、新闻价值、内容完整性评估</div>
+          <div style="margin-top:8px"><span class="badge badge-accent">评分 + 问题 + 建议</span></div>
+        </div>
+        <div class="expert-card">
+          <div class="expert-role">&#x1F3ED; 品牌一致性 Agent</div>
+          <div class="expert-duty">品牌关系验证、禁用词检测</div>
+          <div style="margin-top:8px"><span class="badge badge-warning">风险词 + 修正建议</span></div>
+        </div>
+        <div class="expert-card">
+          <div class="expert-role">&#x1F3A8; 创意洞察 Agent</div>
+          <div class="expert-duty">故事独特性、媒体投放可行性、创意评分</div>
+          <div style="margin-top:8px"><span class="badge badge-info">创意建议</span></div>
+        </div>
+        <div class="expert-card">
+          <div class="expert-role">&#x2696; 法务风险 Agent</div>
+          <div class="expert-duty">轻量合规风险扫描、禁用表述检测</div>
+          <div style="margin-top:8px"><span class="badge badge-danger">风险等级 + 禁用表述</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 平台迁移 ═══ -->
+  <div class="section" id="sec-migration">
+    <div class="anim-item">
+      <div class="section-label"><span class="dot"></span> 低代码平台迁移</div>
+      <h1 class="section-title">Migration</h1>
+      <p class="section-subtitle">向 Dify、Coze、n8n 等低代码平台的迁移部署路径。</p>
+    </div>
+
+    <div class="migration-tabs anim-item">
+      <button class="migration-tab active" data-mtab="dify">Dify</button>
+      <button class="migration-tab" data-mtab="coze">Coze</button>
+      <button class="migration-tab" data-mtab="n8n">n8n</button>
+    </div>
+
+    <!-- Dify -->
+    <div class="migration-panel active" id="mp-dify">
+      <div class="glass-card anim-item">
+        <h3 style="margin-top:0">Dify 工作流</h3>
+        <div class="migration-flow">
+          <div class="mf-row">
+            <div class="mf-node highlight">Start Form</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">LLM 澄清问题</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">Knowledge Retrieval</div>
+          </div>
+          <div style="width:100%;display:flex;justify-content:center"><span class="mf-arrow">&darr;</span></div>
+          <div class="mf-row">
+            <div class="mf-node">Human Confirmation</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">PR Insight LLM</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">PR Draft LLM</div>
+          </div>
+          <div style="width:100%;display:flex;justify-content:center"><span class="mf-arrow">&darr;</span></div>
+          <div class="mf-row">
+            <div class="mf-node">4x Reviewer LLM</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">Human Feedback</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node future">HTTP /api/export</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coze -->
+    <div class="migration-panel" id="mp-coze">
+      <div class="glass-card anim-item">
+        <h3 style="margin-top:0">Coze 集成</h3>
+        <div class="migration-flow">
+          <div class="mf-row">
+            <div class="mf-node highlight">Bot 界面</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">Workflow 引擎</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">Knowledge 知识库</div>
+          </div>
+          <div style="width:100%;display:flex;justify-content:center"><span class="mf-arrow">&darr;</span></div>
+          <div class="mf-row">
+            <div class="mf-node">Plugin: FastAPI 调用</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">多轮修订</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node future">导出交付</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- n8n -->
+    <div class="migration-panel" id="mp-n8n">
+      <div class="glass-card anim-item">
+        <h3 style="margin-top:0">n8n 自动化</h3>
+        <div class="migration-flow">
+          <div class="mf-row">
+            <div class="mf-node highlight">Webhook 触发</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">POST /api/generate-pr</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node">IF 风险判断</div>
+          </div>
+          <div style="width:100%;display:flex;justify-content:center"><span class="mf-arrow">&darr;</span></div>
+          <div class="mf-row">
+            <div class="mf-node">文档归档</div>
+            <span class="mf-arrow">&rarr;</span>
+            <div class="mf-node future">飞书 / Slack 通知</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 部署与规划 ═══ -->
+  <div class="section" id="sec-guide">
+    <div class="anim-item">
+      <div class="section-label"><span class="dot"></span> 部署说明与路线图</div>
+      <h1 class="section-title">Guide & Limits</h1>
+      <p class="section-subtitle">当前实现状态与 Phase 2 开发规划。</p>
+    </div>
+
+    <h3 class="anim-item">已实现功能</h3>
+    <div class="glass-card anim-item">
+      <div class="status-list">
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F4AC;</div>
+          <div class="status-text">ChatBot 对话式 PR 生成工作流</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F4C1;</div>
+          <div class="status-text">品牌文档上传 + LLM 智能提取</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F3E0;</div>
+          <div class="status-text">问界 / AITO 标准样例情报底座</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F50D;</div>
+          <div class="status-text">四专家审定 Agent 系统</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F30D;</div>
+          <div class="status-text">多语言翻译 (LLM 路径)</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F4E5;</div>
+          <div class="status-text">DOCX / JSON / Markdown 导出</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F310;</div>
+          <div class="status-text">FastAPI 服务层 + 鉴权</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(34,197,94,0.12)">&#x1F504;</div>
+          <div class="status-text">无 API Key 确定性降级兜底</div>
+          <span class="badge badge-success status-badge">已完成</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="anim-item">Phase 2 规划</h3>
+    <div class="glass-card anim-item">
+      <div class="status-list">
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(255,255,255,0.05)">&#x1F517;</div>
+          <div class="status-text">网页链接解析 &rarr; LLM 情报提取</div>
+          <span class="badge badge-muted status-badge">规划中</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(255,255,255,0.05)">&#x1F4DA;</div>
+          <div class="status-text">品牌知识库 (向量数据库)</div>
+          <span class="badge badge-muted status-badge">规划中</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(255,255,255,0.05)">&#x1F310;</div>
+          <div class="status-text">实时联网搜索集成</div>
+          <span class="badge badge-muted status-badge">规划中</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(255,255,255,0.05)">&#x1F512;</div>
+          <div class="status-text">多用户 / 权限管理 / 审计日志</div>
+          <span class="badge badge-muted status-badge">规划中</span>
+        </div>
+        <div class="status-item">
+          <div class="status-icon" style="background:rgba(255,255,255,0.05)">&#x2696;</div>
+          <div class="status-text">外部法务合规 API 集成</div>
+          <span class="badge badge-muted status-badge">规划中</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="anim-item">API 接口</h3>
+    <div class="glass-card anim-item">
+      <table class="tech-table">
+        <thead>
+          <tr><th>方法</th><th>端点</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-success">GET</span></td><td><code class="code">/health</code></td><td>健康检查</td></tr>
+          <tr><td><span class="badge badge-danger">POST</span></td><td><code class="code">/api/generate-pr</code></td><td>一站式完整工作流</td></tr>
+          <tr><td><span class="badge badge-danger">POST</span></td><td><code class="code">/api/plan</code></td><td>任务澄清与计划生成</td></tr>
+          <tr><td><span class="badge badge-danger">POST</span></td><td><code class="code">/api/insight</code></td><td>PR Director 洞察生成</td></tr>
+          <tr><td><span class="badge badge-danger">POST</span></td><td><code class="code">/api/generate</code></td><td>PR 稿件生成</td></tr>
+          <tr><td><span class="badge badge-danger">POST</span></td><td><code class="code">/api/review</code></td><td>四专家审定</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="anim-item">鉴权说明</h3>
+    <div class="glass-card anim-item">
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.7">
+        设置环境变量 <code class="code">DEMO_ACCESS_TOKEN</code> 后，FastAPI 要求请求头携带 <code class="code">Authorization: Bearer &lt;token&gt;</code>。未设置时本地 demo 免鉴权。<span style="color:var(--accent)">生产环境</span>应替换为 API Gateway + SSO + Secret Manager。
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+const navBtns = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('.section');
+
+navBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.section;
+    navBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sections.forEach(s => {
+      s.classList.remove('active');
+      if (s.id === 'sec-' + target) {
+        s.classList.add('active');
+        // Re-trigger animations
+        s.querySelectorAll('.anim-item').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight; // reflow
+          el.style.animation = '';
+        });
+      }
+    });
+  });
+});
+
+/* ═══════════════════════════════════════════
+   MIGRATION TABS
+   ═══════════════════════════════════════════ */
+const mTabs = document.querySelectorAll('.migration-tab');
+const mPanels = document.querySelectorAll('.migration-panel');
+mTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    mTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    mPanels.forEach(p => p.classList.remove('active'));
+    document.getElementById('mp-' + tab.dataset.mtab).classList.add('active');
+  });
+});
+
+/* ═══════════════════════════════════════════
+   MOUSE GLOW CURSOR
+   ═══════════════════════════════════════════ */
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+/* ═══════════════════════════════════════════
+   CARD MOUSE TRACKING (Glass highlight)
+   ═══════════════════════════════════════════ */
+document.querySelectorAll('.glass-card, .feature-card, .agent-card, .arch-layer, .flow-step, .sm-node').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--mx', x + '%');
+    card.style.setProperty('--my', y + '%');
+  });
+});
+
+/* ═══════════════════════════════════════════
+   STATE MACHINE NODE HOVER ANGLE
+   ═══════════════════════════════════════════ */
+document.querySelectorAll('.sm-node').forEach(node => {
+  node.addEventListener('mousemove', e => {
+    const rect = node.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const angle = Math.atan2(e.clientY - cy, e.clientX - cx) * (180 / Math.PI);
+    node.style.setProperty('--angle', angle + 'deg');
+  });
+});
+
+/* ═══════════════════════════════════════════
+   INTERSECTION OBSERVER (Scroll reveal fallback)
+   ═══════════════════════════════════════════ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      entry.target.style.filter = 'blur(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.anim-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

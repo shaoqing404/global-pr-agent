@@ -1,0 +1,124 @@
+{
+  "version": "information_search_report_v1",
+  "metadata": {
+    "brand": "string",
+    "product_business": "string",
+    "target_market": "string",
+    "target_language": "string",
+    "pr_objective": "string",
+    "report_date": "YYYY-MM-DD",
+    "confidence_level": "low | medium | high | 中高"
+  },
+  "brand_snapshot": {
+    "brand_positioning": "string",
+    "parent_company_ecosystem": "string",
+    "core_product_lines": [
+      "string"
+    ],
+    "technology_narrative": [
+      "string"
+    ],
+    "current_market_perception": "string",
+    "existing_global_overseas_signals": [
+      "string"
+    ]
+  },
+  "product_offering_summary": [
+    {
+      "product_name": "string",
+      "key_selling_points": "string | array",
+      "technical_differentiators": [
+        "string"
+      ],
+      "user_value": "string",
+      "proof_points": [
+        "string"
+      ],
+      "potential_weaknesses": [
+        "string"
+      ]
+    }
+  ],
+  "target_market_context": {
+    "market_selected": "string",
+    "backup_markets": [
+      "string"
+    ],
+    "why_this_market": "string",
+    "candidate_market_comparison": [
+      "object"
+    ],
+    "local_ev_smart_mobility_landscape": "string",
+    "consumer_preferences": "string",
+    "regulatory_policy_context": "string",
+    "media_narrative": "string"
+  },
+  "competitor_landscape": [
+    {
+      "competitor": "string",
+      "positioning": "string",
+      "strength": "string",
+      "weakness": "string",
+      "pr_implication": "string"
+    }
+  ],
+  "target_audience": {
+    "primary_audience": "string",
+    "secondary_audience": "string",
+    "decision_makers": "string",
+    "emotional_triggers": [
+      "string"
+    ],
+    "rational_triggers": [
+      "string"
+    ],
+    "media_channels": [
+      "string"
+    ]
+  },
+  "localization_strategy": {
+    "recommended_tone": "string",
+    "cultural_considerations": [
+      "string"
+    ],
+    "terms_to_avoid": [
+      "string"
+    ],
+    "topics_to_emphasize": [
+      "string"
+    ],
+    "topics_to_de_emphasize": [
+      "string"
+    ]
+  },
+  "pr_angle_recommendation": {
+    "recommended_main_angle": "string",
+    "alternative_angles": [
+      "string"
+    ],
+    "suggested_headline_directions": [
+      "string"
+    ],
+    "suggested_spokesperson_quote_direction": "string",
+    "suggested_media_pitch_direction": "string"
+  },
+  "risk_register": [
+    {
+      "risk": "string",
+      "why_it_matters": "string",
+      "severity": "low | medium | high",
+      "mitigation": "string"
+    }
+  ],
+  "source_notes": {
+    "high_confidence_sources": [
+      "string"
+    ],
+    "conflicting_information": [
+      "string"
+    ],
+    "unknowns_and_assumptions": [
+      "string"
+    ]
+  }
+}
